@@ -140,3 +140,64 @@ for (variable in variables){
 }
 
 ```
+
+# Apriori
+
+```{r, echo = FALSE}
+
+datos <- read.csv("C:/Users/pablo/Downloads/DataLimpia.csv")
+
+summary(datos)
+
+```
+
+```{r, echo = FALSE}
+#Discretizando
+datos[,1] <- as.character(ifelse(datos[,1] > 600, 3, ifelse(datos[,1]>300, 2, 1)))
+
+datos[,2] <- as.character(ifelse(datos[,2] > 29, 3, ifelse(datos[,2]>22, 2, 1)))
+
+datos[,3] <- as.character(ifelse(datos[,3] > 2.5, 3, ifelse(datos[,3]>1.5, 2, 1)))
+
+datos[,4] <- as.character(ifelse(datos[,4] > 17.5, 3, ifelse(datos[,4]>15.5, 2, 1)))
+
+datos[,5] <- as.character(ifelse(datos[,5] > 2.5, 3, ifelse(datos[,5]>1.5, 2, 1)))
+
+datos[,7] <- as.character(ifelse(datos[,7] > 0.2, 3, ifelse(datos[,7]>0.1, 2, 1)))
+
+datos[,8] <- as.character(ifelse(datos[,8] > 0.2, 3, ifelse(datos[,8]>0.1, 2, 1)))
+
+datos[,10] <- as.character(ifelse(datos[,10] > 2.5, 3, ifelse(datos[,10]>1.5, 2, 1)))
+
+datos[,12] <- as.character(ifelse(datos[,12] > 2, 3, ifelse(datos[,12]>0.5, 2, 1)))
+
+datos[,14] <- as.character(ifelse(datos[,14] > 1, 3, ifelse(datos[,14]>0.5, 2, 1)))
+
+datos[,16] <- as.character(ifelse(datos[,16] > 1, 3, ifelse(datos[,16]>0.5, 2, 1)))
+
+datos[,29] <- as.character(ifelse(datos[,29] > 1, 3, ifelse(datos[,29]>0.5, 2, 1)))
+
+summary(datos)
+
+```
+
+```{r, echo = FALSE}
+
+reglas1<-apriori(datos, parameter = list(support = 0.03, confidence = 0.7,
+                                        target = "rules"))
+
+```
+
+```{r, echo = FALSE}
+
+reglas2<-apriori(datos, parameter = list(support = 0.02, confidence = 0.75,
+                                        target = "rules"))
+
+```
+
+```{r, echo = FALSE}
+
+reglas3<-apriori(datos, parameter = list(support = 0.01, confidence = 0.7,
+                                        target = "rules"))
+
+```
