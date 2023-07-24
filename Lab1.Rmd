@@ -1,0 +1,142 @@
+---
+title: "Lab1"
+author: "Pablo Quintana, Juan Galicia"
+date: "2023-07-21"
+output: html_document
+---
+
+
+
+```{r, echo =FALSE}
+
+library(dplyr)
+#Importando datos
+datos <- read.csv("C:/Users/pablo/Downloads/Lab1.csv")
+
+datosN <- datos[, c(1,2,3,4,6,7,9,11,13,26,27,28)]
+
+datosN[,1] <- as.numeric(na.omit(datos[,1]))
+datosN[,2] <- as.numeric(na.omit(datos[,2]))
+datosN[,3] <- as.numeric(na.omit(datos[,3]))
+datosN[,4] <- as.numeric(na.omit(datos[,4]))
+datosN[,5] <- as.numeric(na.omit(datos[,6]))
+datosN[,6] <- as.numeric(na.omit(datos[,7]))
+datosN[,7] <- as.numeric(na.omit(datos[,9]))
+datosN[,8] <- as.numeric(na.omit(datos[,11]))
+datosN[,9] <- as.numeric(na.omit(datos[,13]))
+datosN[,10] <- as.numeric(na.omit(datos[,26]))
+datosN[,11] <- as.numeric(na.omit(datos[,27]))
+datosN[,12] <- as.numeric(na.omit(datos[,28]))
+
+summary(datos)
+
+#Tomando las variables numericas
+
+```
+
+
+
+
+# 2) Resumen de las variables
+
+Age: Cuantitativa discreta,
+Number.of.sexial.partners: Cuantitativa discreta,
+First.sexual.intercourse: Cuantitativa discreta,
+Number.of.pregnancies: Cuantitativa discreta,
+Smokes: Cualitativa,
+Smokes.packs.per.year: Cuantitativa discreta,
+Homrmonal.Contraceptives: Cualitativa,
+Hormonal.Contraceptives.years: Cuantitativa discreta,
+IUD: Cualitativa,
+IUD.years: Cuantitativa discreta,
+STDs: Cualitativa,
+STDs.number: Cuantitativa discreta,
+STDs.condylomatosis: Cualitativa,
+STDs.cervical.condylomatosis: Cualitativa,
+STDs.vaginal.condylomatosis: Cualitativa,
+STDs.vulvo.perineal.condylomatosis: Cualitativa,
+STDs.syphilis: Cualitativa,
+STDs.pelvic.inflammatory.disease: Cualitativa,
+STDs.genital.herpes: Cualitativa,
+STDs.molluscum.contagiosum: Cualitativa,
+STDs.AIDS: Cualitativa,
+STDs.HIV: Cualitativa,
+STDs.Hepatitis: Cualitativa,
+STDs.HPV: Cualitatitativa,
+STDs.Number.of.diagnosis: Cuantitativa discreta,
+STDs.Time.since.first.diagnosis: Cuantitativa continua,
+STDs.Time.since.last.diagnosis: Cuantitativa continua,
+Dx.Cancer: Cualitativa,
+Dx.CIN: Cualitativa,
+Dx.HPV: CUalitativa,
+Dx: Cualitativa,
+Hinselmann: Cualitativa,
+Schiller: Cualitativa,
+Citology: Cualitativa,
+Biopsy: Cualitativa
+
+# 3) Gráficas para variables cuantitativas
+
+```{r, echo = FALSE}
+
+library(ggplot2)
+
+generar_diagrama_caja <- function(data, variable){
+  ggplot(data, aes(x = "", y = !!sym(variable))) + geom_boxplot() + labs(title = paste("Diagrama de caja y bigote de", variable))
+}
+
+generar_qq_plot <- function(data, variable){
+  qqnorm(data[[variable]], main = paste("QQ Plot de", variable))
+  qqline(data[[variable]])
+}
+
+generar_histograma <- function(data, variable){
+  hist(data[[variable]], main = paste("Histograma de", variable), xlab = variable, ylab = "Frcuencia")
+}
+
+variables <- colnames(datosN)
+
+for (variable in variables){
+  print(generar_diagrama_caja(datosN, variable))
+  #generar_qq_plot(datosN, variable)
+  #generar_histograma(datosN, variable)
+}
+
+```
+
+# 4) Correlaciones
+
+```{r, echo = FALSE}
+library(corrplot)
+
+datosN <- na.omit(datosN)
+
+matriz <- cor(datosN)
+matriz
+
+corrplot(matriz)
+
+```
+
+# 5 Tablas de frecuencia para variables cualitativas
+
+```{r, echo = FALSE}
+
+library(dplyr)
+
+datosC <- select(datos, Smokes, Hormonal.Contraceptives, IUD, STDs, STDs.condylomatosis, STDs.cervical.condylomatosis, STDs.vaginal.condylomatosis, STDs.vulvo.perineal.condylomatosis, STDs.syphilis, STDs.pelvic.inflammatory.disease, STDs.genital.herpes, STDs.molluscum.contagiosum, STDs.AIDS, STDs.HIV, STDs.Hepatitis.B, STDs.HPV, Dx.Cancer, Dx.CIN, Dx.HPV, Dx, Hinselmann, Schiller, Citology, Biopsy)
+
+generar_grafica_barras <- function(data, variable){
+  frecuencia <- table(data[[variable]])
+  barplot(frecuencia, main = paste("Gráfica de barras de", variable), xlab = variable, ylab = "Frecuencia")
+} 
+
+variables <- colnames(datosC)
+
+head(datosC)
+
+for (variable in variables){
+  generar_grafica_barras(datosC, variable)
+}
+
+```
